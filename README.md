@@ -1,14 +1,14 @@
 # VtigerApiBundle
-***
+
 ## Installation
-***
+
 
 ``` bash
 $ composer require gkite13/vtiger-api-bundle
 ```
 
 ## Configuration
-***
+
 
 ``` yaml
 gkite13_vtiger_api:
@@ -19,7 +19,6 @@ gkite13_vtiger_api:
 ```
 
 ## Usage
-***
 
 ### Query
 
