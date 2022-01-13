@@ -1,13 +1,13 @@
-#VtigerApiBundle
+# VtigerApiBundle
 ***
-##Installation
+## Installation
 ***
 
 ``` bash
 $ composer require gkite13/vtiger-api-bundle
 ```
 
-##Configuration
+## Configuration
 ***
 
 ``` yaml
@@ -18,19 +18,19 @@ gkite13_vtiger_api:
         access_key: "user_access_key"
 ```
 
-##Usage
+## Usage
 ***
 
-###Query
+### Query
 
 ``` php
 $queryString = "SELECT * FROM ModuleName";
 $result = $this->vtigerApi->query($queryString);
 ```
 
-###Retrieve
+### Retrieve
 
-To retrieve a record, you need an vtiger_ws_entity id and entityId. 
+To retrieve a record, you need a vtiger_ws_entity id and entityId. 
 ``` php
 $leadId = "10x12345";
 $result = $this->vtigerApi->retrieve($leadId);
