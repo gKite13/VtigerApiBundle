@@ -124,6 +124,64 @@ class VtigerApi
         return $this->_processResult($response);
     }
 
+    public function create(string $entityType, object $data)
+    {
+        $sessionId = $this->getSessionId();
+
+        try {
+            $response = $this->client->request('POST', $this->api_uri, [
+                'body' => [
+                    'operation' => 'create',
+                    'sessionName' => $sessionId,
+                    'elementType' => $entityType,
+                    'element' => json_encode($data),
+                ],
+            ]);
+        } catch (\Exception $ex) {
+            throw new VtigerApiException(sprintf('%s %s', 'Create request failed.', $ex->getMessage()));
+        }
+
+        return $this->_processResult($response);
+    }
+
+    public function update(object $data)
+    {
+        $sessionId = $this->getSessionId();
+
+        try {
+            $response = $this->client->request('POST', $this->api_uri, [
+                'body' => [
+                    'operation' => 'update',
+                    'sessionName' => $sessionId,
+                    'element' => json_encode($data),
+                ],
+            ]);
+        } catch (\Exception $ex) {
+            throw new VtigerApiException(sprintf('%s %s', 'Update request failed.', $ex->getMessage()));
+        }
+
+        return $this->_processResult($response);
+    }
+
+    public function delete($id)
+    {
+        $sessionId = $this->getSessionId();
+
+        try {
+            $response = $this->client->request('POST', $this->api_uri, [
+                'body' => [
+                    'operation' => 'delete',
+                    'sessionName' => $sessionId,
+                    'id' => $id,
+                ],
+            ]);
+        } catch (\Exception $ex) {
+            throw new VtigerApiException(sprintf('%s %s', 'Update request failed.', $ex->getMessage()));
+        }
+
+        return $this->_processResult($response);
+    }
+
     protected function _checkResponseStatusCode(ResponseInterface $response)
     {
         if ($response->getStatusCode() !== 200) {
@@ -150,8 +208,9 @@ class VtigerApi
 
     protected function _processResponse(ResponseInterface $response): ?object
     {
-        if (!empty($response->getContent())) {
-            return json_decode($response->getContent());
+        $responseContent = $response->getContent();
+        if (!empty($responseContent)) {
+            return json_decode($responseContent);
         }
 
         return null;
