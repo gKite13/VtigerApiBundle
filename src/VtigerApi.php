@@ -10,33 +10,48 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class VtigerApi
 {
-    public const CACHE_KEY = 'vtiger_api_session_key';
+    private const DEFAULT_CACHE_KEY = 'vtiger_api_session_key';
+    private const DEFAULT_CACHE_EXPIRE_TIME = 300;
 
     private string $api_uri;
     private string $user;
     private string $access_key;
     private CacheItemPoolInterface $cache;
     private HttpClientInterface $client;
+    private ?string $cacheKey;
+    private ?int $cacheExpireTime;
 
-    public function __construct(CacheItemPoolInterface $cache, HttpClientInterface $client, string $site_url, string $user, string $access_key)
+    public function __construct(CacheItemPoolInterface $cache, HttpClientInterface $client, string $site_url, string $user, string $access_key, ?string $cacheKey = null, ?int $cache_expire_time)
     {
         $this->cache = $cache;
         $this->client = $client;
         $this->user = $user;
         $this->access_key = $access_key;
         $this->api_uri = $site_url.'/webservice.php';
+        $this->cacheKey = $cacheKey;
+        $this->cacheExpireTime = $cache_expire_time;
+    }
+
+    protected function getCacheKey(): string
+    {
+        return null === $this->cacheKey ? self::DEFAULT_CACHE_KEY : $this->cacheKey;
+    }
+
+    protected function getCacheExpireTime(): int
+    {
+        return null === $this->cacheExpireTime ? self::DEFAULT_CACHE_EXPIRE_TIME : $this->cacheExpireTime;
     }
 
     protected function getSessionId()
     {
-        $cacheItem = $this->cache->getItem(self::CACHE_KEY);
+        $cacheItem = $this->cache->getItem($this->getCacheKey());
 
         if ($cacheItem->isHit()) {
             $sessionId = $cacheItem->get();
         } else {
             $sessionId = $this->auth();
             $cacheItem->set($sessionId);
-            $cacheItem->expiresAfter(300);
+            $cacheItem->expiresAfter($this->getCacheExpireTime());
             $this->cache->save($cacheItem);
         }
 

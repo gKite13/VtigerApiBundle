@@ -57,9 +57,9 @@ $result = $this->vtigerApi->retrieve($leadId);
 
 ``` php
 $lead = new \stdClass();
-$lead->property1;
-$lead->property2;
-$result = $this->vtigerApi->create($lead);
+$lead->property1 = 'test';
+$lead->property2 = 12345;
+$result = $this->vtigerApi->create('EntityType', $lead);
 ```
 
 ### Update
@@ -67,8 +67,8 @@ $result = $this->vtigerApi->create($lead);
 ``` php
 $leadId = "10x12345";
 $lead = $this->vtigerApi->retrieve($leadId);
-$lead->property1;
-$lead->property2;
+$lead->property1 = 'test2';
+$lead->property2 = 123;
 $result = $this->vtigerApi->update($lead);
 ```
 

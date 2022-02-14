@@ -33,7 +33,11 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('cache')
                     ->children()
                         ->scalarNode('pool')
-                    ->end()
+                        ->end()
+                        ->scalarNode('cache_key')
+                        ->end()
+                        ->scalarNode('expire_time')
+                        ->end()
                 ->end()
             ->end()
         ;

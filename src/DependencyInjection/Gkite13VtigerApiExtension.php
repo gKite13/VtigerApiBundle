@@ -27,6 +27,12 @@ class Gkite13VtigerApiExtension extends Extension
         $definition->setArgument(2, $config['api']['site_url']);
         $definition->setArgument(3, $config['api']['user']);
         $definition->setArgument(4, $config['api']['access_key']);
+        if(isset($config['cache']['cache_key'])) {
+            $definition->setArgument(5, $config['cache']['cache_key']);
+        }
+        if(isset($config['cache']['expire_time'])) {
+            $definition->setArgument(6, $config['cache']['expire_time']);
+        }
     }
 
     private function setCachePool(Definition $definition, array $config): void
